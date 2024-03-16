@@ -19,6 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
     ];
 
@@ -31,6 +32,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 
     /**
      * Get the attributes that should be cast.
