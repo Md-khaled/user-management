@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Events\UserAddressCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,6 +34,13 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     static::created(function ($user) {
+    //         event(new UserAddressCreated($user, request()->input('addresses', [])));
+    //     });
+    // }
 
     public function addresses()
     {
