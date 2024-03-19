@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Create Company') }}
+            {{ __('Create User') }}
         </h2>
     </x-slot>
  
@@ -68,8 +68,8 @@
                             <x-text-input id="photo" class="mt-1 p-2 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full"
                                 type="file"
                                 name="file"
-                                autocomplete="new-password" />
-                            
+                                autocomplete="photo" />
+                                <x-input-error :messages="$errors->get('file')" class="mt-2" />
                         </div>
 
                          <!-- Address Fields Component -->
