@@ -44,55 +44,55 @@
             <!-- <x-input-error :messages="$errors->get('addresses.*.country')" class="mt-2" /> -->
         </div>
 
-        <button type="button" class="mt-2 remove-address">
-            <i class="fas fa-minus-circle"></i>
+        <button type="button" class="mt-2 remove-address" onclick="removeAddress(this)">
+            <i class="fas fa-minus-circle"></i>Remove Address
         </button>
     </div>
 </div>
 
-<button type="button" id="add-address" class="float-right"><i class="fas fa-plus-circle"></i></button>
+<button type="button" id="add-address" class="float-right">
+    <i class="fas fa-plus-circle"></i>Add Address
+</button>
 <script>
-    let addressCount = 1;
+    let addressCounter = 0;
 
 document.getElementById('add-address').addEventListener('click', function () {
+    addressCounter++;
     const addressFields = document.getElementById('address-fields');
     const newAddress = document.createElement('div');
     newAddress.classList.add('address');
     newAddress.innerHTML = `
         <div class="mt-4">
             <x-input-label for="street" :value="__('Street')" />
-            <x-text-input name="addresses[${addressCount}][street]" type="text" class="block mt-1 w-full" />
+            <x-text-input name="addresses[${addressCounter}][street]" type="text" class="block mt-1 w-full" />
         </div>
         <div class="mt-4">
             <x-input-label for="city" :value="__('City')" />
-            <x-text-input name="addresses[${addressCount}][city]" type="text" class="block mt-1 w-full" />
+            <x-text-input name="addresses[${addressCounter}][city]" type="text" class="block mt-1 w-full" />
         </div>
         <div class="mt-4">
             <x-input-label for="state" :value="__('State')" />
-            <x-text-input name="addresses[${addressCount}][state]" type="text" class="block mt-1 w-full" />
+            <x-text-input name="addresses[${addressCounter}][state]" type="text" class="block mt-1 w-full" />
         </div>
         <div class="mt-4">
             <x-input-label for="postal_code" :value="__('Postal Code')" />
-            <x-text-input name="addresses[${addressCount}][postal_code]" type="text" class="block mt-1 w-full" />
+            <x-text-input name="addresses[${addressCounter}][postal_code]" type="text" class="block mt-1 w-full" />
         </div>
         <div class="mt-4">
             <x-input-label for="country" :value="__('Country')" />
-            <x-text-input name="addresses[${addressCount}][country]" type="text" class="block mt-1 w-full" />
+            <x-text-input name="addresses[${addressCounter}][country]" type="text" class="block mt-1 w-full" />
         </div>
-        <button type="button" class="mt-2 remove-address">
+        <button type="button" class="mt-2 remove-address" onclick="removeAddress(this)">
             <i class="fas fa-minus-circle"></i> Remove Address
         </button>
     `;
     addressFields.appendChild(newAddress);
-    addressCount++;
 });
-
-document.getElementById('address-fields').addEventListener('click', function (event) {
-    if (event.target.classList.contains('remove-address') && addressCount > 1) {
-        event.target.parentNode.remove();
-        addressCount--;
-    }
-});
+function removeAddress(button) {
+    const address = button.parentElement;
+    address.remove();
+    addressCounter--;
+}
 
 function validateData() {
         var streets = document.querySelectorAll('.street');
