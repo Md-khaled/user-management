@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Create User') }}
+            {{ __('Edit User') }}
         </h2>
     </x-slot>
  
@@ -9,15 +9,15 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="overflow-hidden overflow-x-auto border-b border-gray-200 bg-white p-6">
-                    
-                    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('users.update', $user) }}" method="POST">
                         @csrf
- 
-                        <x-user-info :user="[]"/>
-
-                         <!-- Address Fields Component -->
-                        <x-user-address-fields :address="[]" :key="0" :total="0" />
-                        <button type="button" id="add-address" class="float-right">
+                        @method('PUT')
+                        <x-user-info :user="$user"/>
+                        <!-- Address Fields Component -->
+                        @foreach($user->addresses as $address) 
+                            <x-user-address-fields :address="$address" :key="$loop->index" :total="$user->addresses->count()" />
+                        @endforeach
+                        <button type="button" id="add-address" class="float-right" onclick="addAddress()">
                             <i class="fas fa-plus-circle"></i>Add Address
                         </button>
                         <div class="mt-4">
@@ -31,11 +31,15 @@
         </div>
     </div>
 </x-app-layout>
+ 
 <script>
+    
 const totalAddress = document.getElementById('address-fields').getAttribute('data-address-counter');
 let addressCounter = totalAddress;
  function addAddress() {
     addressCounter++;
+console.log(addressCounter);
+
     const addressFields = document.getElementById('address-fields');
     const newAddress = document.createElement('div');
     newAddress.classList.add('address');

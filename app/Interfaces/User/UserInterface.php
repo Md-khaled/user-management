@@ -12,7 +12,7 @@ interface UserInterface
 
     public function saveUser($data);
 
-    public function updateUser($id, array $data);
+    public function updateUser($data, $id);
 
     public function deleteUser($id);
 }

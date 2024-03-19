@@ -1,40 +1,6 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Create User') }}
-        </h2>
-    </x-slot>
- 
-    <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                <div class="overflow-hidden overflow-x-auto border-b border-gray-200 bg-white p-6">
-                    
-                    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
- 
-                        <x-user-info :user="[]"/>
 
-                         <!-- Address Fields Component -->
-                        <x-user-address-fields :address="[]" :key="0" :total="0" />
-                        <button type="button" id="add-address" class="float-right">
-                            <i class="fas fa-plus-circle"></i>Add Address
-                        </button>
-                        <div class="mt-4">
-                            <x-primary-button>
-                                Save
-                            </x-primary-button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
-<script>
-const totalAddress = document.getElementById('address-fields').getAttribute('data-address-counter');
-let addressCounter = totalAddress;
- function addAddress() {
+let addressCounter = 1;
+export function addAddress() {
     addressCounter++;
     const addressFields = document.getElementById('address-fields');
     const newAddress = document.createElement('div');
@@ -67,7 +33,7 @@ let addressCounter = totalAddress;
     addressFields.appendChild(newAddress);
 }
 
- function removeAddress(button) {
+export function removeAddress(button) {
     const address = button.parentElement;
     address.remove();
     addressCounter--;
@@ -115,5 +81,3 @@ function validateData() {
             alert('Please fill in all address fields.');
         }
     }
-
-</script>

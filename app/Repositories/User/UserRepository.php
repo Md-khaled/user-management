@@ -3,6 +3,7 @@
 namespace App\Repositories\User;
 
 use App\Events\UserAddressCreated;
+use App\Events\UserAddressUpdated;
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
 use App\Services\FileUploadService;
@@ -45,11 +46,33 @@ class UserRepository implements UserInterface
         }
     }
 
-    public function updateUser($id, array $data)
+    public function updateUser($request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update($data);
+        $user->update($request);
         return $user;
+        try {
+            DB::beginTransaction();
+
+            $user = User::findOrFail($id);
+            $user->update($request);
+
+            if ($request->has('file')) {
+                FileUploadService::uploadFile($request->file, $user);
+            }
+            
+            if ($request->has('addresses')) {
+                UserAddressUpdated::dispatch($user, $request->input('addresses'));
+            }
+        
+            DB::commit();
+        
+            return $user;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating user: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to create user'], 500);
+        }
     }
 
     public function deleteUser($id)

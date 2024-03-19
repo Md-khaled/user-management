@@ -19,10 +19,12 @@ class UserAddressUpdated
      * Create a new event instance.
      */
     public $user;
+    public $addresses;
     
-    public function __construct(User $user)
+    public function __construct(User $user, array $addresses)
     {
         $this->user = $user;
+        $this->addresses = $addresses;
     }
 
     /**

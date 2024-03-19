@@ -28,9 +28,9 @@ class UserService
         return $this->userRepository->saveUser($requet);
     }
 
-    public function update(array $data, $id)
+    public function update($requet, $id)
     {
-        return $this->userRepository->updateUser($data, $id);
+        return $this->userRepository->updateUser($requet, $id);
     }
     
     public function delete($id)
