@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\RegisterUserRequest;
+use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -23,9 +24,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        return view('users.create');   
+        $users = User::all();
+ 
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -39,11 +42,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RegisterUserRequest $registerUserRequest)
     {
-        // return $request->input('name');
-    //    $request->validated();
-        return $this->userService->create($request);
+        $this->userService->create($registerUserRequest);
+        return redirect()->back();
     }
 
     /**
