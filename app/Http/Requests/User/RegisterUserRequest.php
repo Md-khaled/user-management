@@ -21,20 +21,18 @@ class RegisterUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        // return [
-        //     'email' => ['required', 'string', 'email'],
-        //     'password' => ['required', 'string'],
-        // ];
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
-            'photo' => 'required|max:2048',
-            'addresses.*.street' => 'required|string|max:255',
-            'addresses.*.city' => 'required|string|max:255',
-            'addresses.*.state' => 'required|string|max:255',
-            'addresses.*.postal_code' => 'required|string|max:255',
-            'addresses.*.country' => 'required|string|max:255',
+            'password_confirmation' => 'required|string|min:8|same:password',
+            'file' => 'required|max:2048',
+            // 'addresses.*.street' => 'required|string|max:255',
+            // 'addresses.*.city' => 'required|string|max:255',
+            // 'addresses.*.state' => 'required|string|max:255',
+            // 'addresses.*.postal_code' => 'required|string|max:255',
+            // 'addresses.*.country' => 'required|string|max:255',
         ];
     }
 }
