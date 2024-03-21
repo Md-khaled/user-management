@@ -4,19 +4,21 @@
             {{ __('Edit User') }}
         </h2>
     </x-slot>
- 
+
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="overflow-hidden overflow-x-auto border-b border-gray-200 bg-white p-6">
-                <form action="{{ route('users.update', $user) }}" method="POST">
+                <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <x-user-info :user="$user"/>
+                        <x-user-info :user="$user" :isEdit=true/>
                         <!-- Address Fields Component -->
-                        @foreach($user->addresses as $address) 
+                        @forelse($user->addresses as $address)
                             <x-user-address-fields :address="$address" :key="$loop->index" :total="$user->addresses->count()" />
-                        @endforeach
+                        @empty
+                            <x-user-address-fields :address="[]" :key="0" :total="0" />
+                       @endforelse
                         <button type="button" id="add-address" class="float-right" onclick="addAddress()">
                             <i class="fas fa-plus-circle"></i>Add Address
                         </button>
@@ -31,15 +33,13 @@
         </div>
     </div>
 </x-app-layout>
- 
+
 <script>
-    
-const totalAddress = document.getElementById('address-fields').getAttribute('data-address-counter');
+
+const totalAddress = document.getElementById('address-fields').getAttribute('data-address-counter') ;
 let addressCounter = totalAddress;
  function addAddress() {
     addressCounter++;
-console.log(addressCounter);
-
     const addressFields = document.getElementById('address-fields');
     const newAddress = document.createElement('div');
     newAddress.classList.add('address');

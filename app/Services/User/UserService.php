@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Request;
 
 class UserService
 {
-    // protected $userRepository;
-    public function __construct(protected UserInterface $userRepository) {}
-    // public function __construct(UserInterface $userRepository) {
-    //     $this->userRepository = $userRepository;
-    // }
+     protected $userRepository;
+//    public function __construct(protected UserInterface $userRepository) {}
+     public function __construct(UserInterface $userRepository) {
+         $this->userRepository = $userRepository;
+     }
 
     public function all()
     {
@@ -22,7 +22,7 @@ class UserService
     {
         return $this->userRepository->getUserById($id);
     }
-    
+
     public function create($requet)
     {
         return $this->userRepository->saveUser($requet);
@@ -32,9 +32,21 @@ class UserService
     {
         return $this->userRepository->updateUser($requet, $id);
     }
-    
+
     public function delete($id)
     {
         return $this->userRepository->deleteUser($id);
-    }   
+    }
+    public function restore($id)
+    {
+        return $this->userRepository->restore($id);
+    }
+    public function forceDelete($id)
+    {
+        return $this->userRepository->forceDelete($id);
+    }
+    public function deletedList()
+    {
+        return $this->userRepository->deleteUserList();
+    }
 }

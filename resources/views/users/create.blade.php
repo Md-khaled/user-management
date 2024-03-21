@@ -4,20 +4,20 @@
             {{ __('Create User') }}
         </h2>
     </x-slot>
- 
+
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="overflow-hidden overflow-x-auto border-b border-gray-200 bg-white p-6">
-                    
+
                     <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
- 
+
                         <x-user-info :user="[]"/>
 
                          <!-- Address Fields Component -->
                         <x-user-address-fields :address="[]" :key="0" :total="0" />
-                        <button type="button" id="add-address" class="float-right">
+                        <button type="button" id="add-address" class="float-right" onclick="addAddress()">
                             <i class="fas fa-plus-circle"></i>Add Address
                         </button>
                         <div class="mt-4">
@@ -32,7 +32,7 @@
     </div>
 </x-app-layout>
 <script>
-const totalAddress = document.getElementById('address-fields').getAttribute('data-address-counter');
+const totalAddress = document.getElementById('address-fields').getAttribute('data-address-counter') ?? 1;
 let addressCounter = totalAddress;
  function addAddress() {
     addressCounter++;
