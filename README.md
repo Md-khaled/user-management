@@ -21,7 +21,7 @@ laravel "^11.0"
 4. **Copy the `.env.example` file to `.env` and configure your environment variables likevMySql:** `cp .env.example .env`
 5. **Generate a new application key:** `php artisan key:generate`
 6. **Run database migrations to create the necessary tables:** `php artisan migrate:fresh`
-7. **npm install and npm run dev**
+7. `npm install and npm run dev`
 8. **Serve the application:** `php artisan serve`
 
 The application will be available at `http://localhost:8000`.
