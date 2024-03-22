@@ -35,9 +35,9 @@ class UserRepository implements UserInterface
             if ($request->has('addresses')) {
                 UserAddressCreated::dispatch($user, $request->input('addresses'));
             }
-        
+
             DB::commit();
-        
+
             return $user;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -60,13 +60,13 @@ class UserRepository implements UserInterface
             if ($request->has('file')) {
                 FileUploadService::uploadFile($request->file, $user);
             }
-            
+
             if ($request->has('addresses')) {
                 UserAddressUpdated::dispatch($user, $request->input('addresses'));
             }
-        
+
             DB::commit();
-        
+
             return $user;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -84,5 +84,22 @@ class UserRepository implements UserInterface
     public function getUserById($id)
     {
         return User::findOrFail($id);
+    }
+    public function deleteUserList()
+    {
+        return User::onlyTrashed()->get();
+
+    }
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id);
+        return $user->restore();
+    }
+    public function forceDelete($id)
+    {
+        $user = User::onlyTrashed()->find($id);
+        if ($user) {
+            $user->forceDelete();
+        }
     }
 }

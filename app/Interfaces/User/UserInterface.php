@@ -15,4 +15,7 @@ interface UserInterface
     public function updateUser($data, $id);
 
     public function deleteUser($id);
+    public function restore($id);
+    public function forceDelete($id);
+    public function deleteUserList();
 }
