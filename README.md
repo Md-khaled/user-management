@@ -13,6 +13,9 @@ laravel "^11.0"
 - Adreess automically create via event
 - Soflt deleted user crud
 
+## Test
+- `php artisan test --filter UserServiceTest`
+
 ## Installation
 
 1. **Clone the repository:** `git clone <https://github.com/Md-khaled/people-management>`
