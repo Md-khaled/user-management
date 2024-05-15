@@ -16,7 +16,7 @@
                     </a>
 
                     <div class="min-w-full align-middle">
-                        <table class="min-w-full border divide-y divide-gray-200">
+                        <table class="w-full min-w-full border divide-y divide-gray-200">
                             <thead>
                             <tr>
                                 <th class="bg-gray-50 px-6 py-3 text-left">

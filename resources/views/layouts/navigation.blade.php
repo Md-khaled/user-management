@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                         {{ __('User List') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('users.soft-delete')" :active="request()->routeIs('users.soft-delete')">
+                    <x-nav-link :href="route('users.trashed')" :active="request()->routeIs('users.trashed')">
                         {{ __('Deleted User List') }}
                     </x-nav-link>
                 </div>

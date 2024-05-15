@@ -82,7 +82,7 @@ class UserController extends Controller
         return to_route('users.index');
     }
 
-    public function deletedList()
+    public function trashed()
     {
         $deletedUsers = $this->userService->deletedList();
         return view('users.deleted-list', compact('deletedUsers'));
@@ -92,7 +92,7 @@ class UserController extends Controller
         $this->userService->restore($id);
         return back();
     }
-    public function forceDelete(int $id)
+    public function delete(int $id)
     {
         $this->userService->forceDelete($id);
         return back();
