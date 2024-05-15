@@ -5,7 +5,7 @@ if (!function_exists('getProfilePhotoUrl')) {
     function getProfilePhotoUrl()
     {
         $user = Auth::user();
-        $name = $user->name;
+        $name = $user->username;
         $url = $user->images?->url;
         if (!is_null($url)) {
             return url('storage/' . $url);
