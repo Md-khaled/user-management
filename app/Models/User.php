@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Events\UserAddressCreated;
+use App\Events\UserSaved;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
+
     public $table = "users";
 
     /**
@@ -41,18 +43,13 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     static::created(function ($user) {
-    //         event(new UserAddressCreated($user, request()->input('addresses', [])));
-    //     });
-    // }
-
-    public function addresses()
+    protected static function booted(): void
     {
-        return $this->hasMany(Address::class);
+        static::saved(function (User $user) {
+            event(new UserSaved($user));
+        });
     }
+
     public function images()
     {
         return $this->morphOne(Image::class, 'imageable');

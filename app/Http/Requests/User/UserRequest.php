@@ -32,7 +32,7 @@ class UserRequest extends FormRequest
             'suffixname' => ['nullable', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required_if:is_post,true', 'confirmed', Rules\Password::defaults()],
             'photo' => ['nullable', 'image', 'max:1024'],
             'type' => ['nullable', 'string', Rule::in(['user', 'admin'])],
         ];

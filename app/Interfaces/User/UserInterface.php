@@ -2,6 +2,7 @@
 
 namespace App\Interfaces\User;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Request;
 
 interface UserInterface
@@ -19,4 +20,5 @@ interface UserInterface
     public function forceDelete($id);
     public function deleteUserList();
     public function hash($password);
+    public function saveUserBackgroundInformation(User $user);
 }

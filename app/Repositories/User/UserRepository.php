@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 use App\Events\UserAddressCreated;
 use App\Events\UserAddressUpdated;
 use App\Interfaces\User\UserInterface;
+use App\Models\Detail;
 use App\Models\User;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\DB;
@@ -91,16 +92,19 @@ class UserRepository implements UserInterface
     {
         return User::findOrFail($id);
     }
+
     public function deleteUserList()
     {
         return User::onlyTrashed()->get();
 
     }
+
     public function restore($id)
     {
         $user = User::withTrashed()->find($id);
         return $user->restore();
     }
+
     public function forceDelete($id)
     {
         $user = User::onlyTrashed()->find($id);
@@ -112,5 +116,75 @@ class UserRepository implements UserInterface
     public function hash($password)
     {
         return Hash::make($password);
+    }
+
+    public function saveUserBackgroundInformation(User $user)
+    {
+        /*$fullName = $this->getFullName($user);
+        $middleInitial = $this->getMiddleInitial($user);
+        $avatar = $this->getAvatar($user);
+        $gender = $this->getGender($user);
+
+        Detail::create([
+            'user_id' => $user->id,
+            'key' => 'full_name',
+            'value' => $fullName,
+            'type' => 'detail',
+        ]);
+
+        Detail::create([
+            'user_id' => $user->id,
+            'key' => 'middle_initial',
+            'value' => $middleInitial,
+            'type' => 'detail',
+        ]);
+
+        Detail::create([
+            'user_id' => $user->id,
+            'key' => 'avatar',
+            'value' => $avatar,
+            'type' => 'detail',
+        ]);
+
+        Detail::create([
+            'user_id' => $user->id,
+            'key' => 'gender',
+            'value' => $gender,
+            'type' => 'detail',
+        ]);*/
+
+        $details = [
+            ['key' => 'full_name', 'value' => $this->getFullName($user)],
+            ['key' => 'middle_initial', 'value' => $this->getMiddleInitial($user)],
+            ['key' => 'avatar', 'value' => $this->getAvatar($user)],
+            ['key' => 'gender', 'value' => $this->getGender($user)]
+        ];
+
+        foreach ($details as $detail) {
+            Detail::updateOrCreate(
+                ['user_id' => $user->id, 'key' => $detail['key']],
+                ['value' => $detail['value'], 'type' => 'detail']
+            );
+        }
+    }
+
+    protected function getFullName(User $user): string
+    {
+        return "{$user->firstname} {$user->middlename} {$user->lastname}";
+    }
+
+    protected function getMiddleInitial(User $user): string
+    {
+        return strtoupper(substr($user->middlename, 0, 1) . '.');
+    }
+
+    protected function getAvatar(User $user): string
+    {
+        return $user->photo ?? 'default-avatar.jpg';
+    }
+
+    protected function getGender(User $user): string
+    {
+        return $user->prefixname === 'Mr' ? 'Male' : ($user->prefixname === 'Mrs' ? 'Female' : 'Other');
     }
 }
