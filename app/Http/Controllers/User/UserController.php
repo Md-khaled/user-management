@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\RegisterUserRequest;
+use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Contracts\View\View;
@@ -42,7 +42,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterUserRequest $registerUserRequest)
+    public function store(UserRequest $registerUserRequest)
     {
         $this->userService->create($registerUserRequest);
         return redirect()->back();
@@ -67,9 +67,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $updateRequest, $id)
     {
-        $this->userService->update($request, $id);
+        $this->userService->update($updateRequest, $id);
         return redirect()->back();
     }
 

@@ -18,4 +18,5 @@ interface UserInterface
     public function restore($id);
     public function forceDelete($id);
     public function deleteUserList();
+    public function hash($password);
 }

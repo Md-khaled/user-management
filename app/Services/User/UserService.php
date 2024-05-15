@@ -49,4 +49,7 @@ class UserService
     {
         return $this->userRepository->deleteUserList();
     }
+    public function hash($password) {
+         return $this->userRepository->hash($password);
+    }
 }

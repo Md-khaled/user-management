@@ -29,6 +29,7 @@
                                     <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Phone</span>
                                 </th>
                                 <th class="w-56 bg-gray-50 px-6 py-3 text-left">
+                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Action</span>
                                 </th>
                             </tr>
                             </thead>
@@ -37,13 +38,13 @@
                                 @foreach($users as $user)
                                     <tr class="bg-white">
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
-                                            {{ $user->name }}
+                                            {{ $user->username }}
                                         </td>
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
                                             {{ $user->email ?? '' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
-                                            {{ $user->phone ?? '' }}
+                                            {{ $user->type ?? '' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
                                             <a href="{{ route('users.show', $user) }}"

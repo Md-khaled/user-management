@@ -25,15 +25,19 @@ class UserRepository implements UserInterface
             DB::beginTransaction();
 
             $user = User::create([
-                'name' => $request->name,
+                'prefixname' => $request->prefixname,
+                'firstname' => $request->firstname,
+                'middlename' => $request->middlename,
+                'lastname' => $request->lastname,
+                'suffixname' => $request->suffixname,
+                'username' => $request->username,
                 'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => Hash::make($request->password),
+                'password' => $this->hash($request->password),
+                'type' => $request->type,
             ]);
 
-            FileUploadService::uploadFile($request->file, $user);
-            if ($request->has('addresses')) {
-                UserAddressCreated::dispatch($user, $request->input('addresses'));
+            if ($request->has('photo')) {
+                FileUploadService::uploadFile($request->photo, $user);
             }
 
             DB::commit();
@@ -48,21 +52,23 @@ class UserRepository implements UserInterface
 
     public function updateUser($request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->update($request);
-        return $user;
         try {
             DB::beginTransaction();
 
             $user = User::findOrFail($id);
-            $user->update($request);
+            $user->update($request->only([
+                'prefixname',
+                'firstname',
+                'middlename',
+                'lastname',
+                'suffixname',
+                'username',
+                'email',
+                'type',
+            ]));
 
-            if ($request->has('file')) {
-                FileUploadService::uploadFile($request->file, $user);
-            }
-
-            if ($request->has('addresses')) {
-                UserAddressUpdated::dispatch($user, $request->input('addresses'));
+            if ($request->has('photo')) {
+                FileUploadService::uploadFile($request->photo, $user);
             }
 
             DB::commit();
@@ -101,5 +107,10 @@ class UserRepository implements UserInterface
         if ($user) {
             $user->forceDelete();
         }
+    }
+
+    public function hash($password)
+    {
+        return Hash::make($password);
     }
 }
