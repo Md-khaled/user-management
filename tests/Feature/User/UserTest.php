@@ -94,6 +94,21 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $user->id, 'firstname' => 'UpdatedName']);
     }
 
+    public function test_it_updates_user_validation_errors_redirect_back_to_form()
+    {
+        $user = $this->user;
+        $updateData = [
+            'firstname' => '',
+            'lastname' => '',
+        ];
+        $url = route('users.update', $user->id);
+
+        $response = $this->from($url)->put($url, $updateData);
+
+        $response->assertStatus(302);
+        $response->assertInvalid(['firstname', 'lastname']);
+    }
+
     public function test_it_deletes_user()
     {
         $user = $this->user;
