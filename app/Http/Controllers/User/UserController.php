@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $users = User::all();
+        $users = $this->userService->userList();
 
         return view('users.index', compact('users'));
     }
@@ -44,7 +44,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $registerUserRequest)
     {
-        $this->userService->create($registerUserRequest);
+        $this->userService->store($registerUserRequest);
         return redirect()->back();
     }
 
@@ -78,13 +78,13 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->userService->delete($id);
+        $this->userService->destroy($id);
         return to_route('users.index');
     }
 
     public function trashed()
     {
-        $deletedUsers = $this->userService->deletedList();
+        $deletedUsers = $this->userService->listTrashed();
         return view('users.deleted-list', compact('deletedUsers'));
     }
     public function restore(int $id)
@@ -94,7 +94,7 @@ class UserController extends Controller
     }
     public function delete(int $id)
     {
-        $this->userService->forceDelete($id);
+        $this->userService->delete($id);
         return back();
     }
 }

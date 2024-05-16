@@ -16,7 +16,7 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function all()
+    public function userList()
     {
         return $this->userRepository->getUsers();
     }
@@ -26,7 +26,7 @@ class UserService
         return $this->userRepository->getUserById($id);
     }
 
-    public function create($requet)
+    public function store($requet)
     {
         return $this->userRepository->saveUser($requet);
     }
@@ -36,7 +36,7 @@ class UserService
         return $this->userRepository->updateUser($requet, $id);
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         return $this->userRepository->deleteUser($id);
     }
@@ -46,12 +46,12 @@ class UserService
         return $this->userRepository->restore($id);
     }
 
-    public function forceDelete($id)
+    public function delete($id)
     {
         return $this->userRepository->forceDelete($id);
     }
 
-    public function deletedList()
+    public function listTrashed()
     {
         return $this->userRepository->deleteUserList();
     }

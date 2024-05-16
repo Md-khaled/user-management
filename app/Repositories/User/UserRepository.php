@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Request;
 
 class UserRepository implements UserInterface
 {
+    const PER_PAGE = 10;
+
     public function getUsers()
     {
-        return User::all();
+        return User::paginate(self::PER_PAGE);
     }
 
     public function saveUser($request)
