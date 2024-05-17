@@ -9,17 +9,20 @@ laravel "^11.0"
 
 ## Features
 
+- Authentication system
 - User crud operation
-- Adreess automically create via event
+- User details automically create via event
 - Soflt deleted user crud
+- Unit and feature test
+
 
 ## Test
-- `php artisan test --filter UserServiceTest`
+- `php artisan test`
 
 ## Installation
 
-1. **Clone the repository:** `git clone <https://github.com/Md-khaled/people-management>`
-2. **Navigate to the project directory:** `cd user-management-system`
+1. **Clone the repository:** `git clone <https://github.com/Md-khaled/user-management.git>`
+2. **Navigate to the project directory:** `cd user-management`
 3. **Install Composer dependencies:** `composer install`
 4. **Copy the `.env.example` file to `.env` and configure your environment variables likevMySql:** `cp .env.example .env`
 5. **Generate a new application key:** `php artisan key:generate`
