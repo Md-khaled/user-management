@@ -122,39 +122,6 @@ class UserRepository implements UserInterface
 
     public function saveUserBackgroundInformation(User $user)
     {
-        /*$fullName = $this->getFullName($user);
-        $middleInitial = $this->getMiddleInitial($user);
-        $avatar = $this->getAvatar($user);
-        $gender = $this->getGender($user);
-
-        Detail::create([
-            'user_id' => $user->id,
-            'key' => 'full_name',
-            'value' => $fullName,
-            'type' => 'detail',
-        ]);
-
-        Detail::create([
-            'user_id' => $user->id,
-            'key' => 'middle_initial',
-            'value' => $middleInitial,
-            'type' => 'detail',
-        ]);
-
-        Detail::create([
-            'user_id' => $user->id,
-            'key' => 'avatar',
-            'value' => $avatar,
-            'type' => 'detail',
-        ]);
-
-        Detail::create([
-            'user_id' => $user->id,
-            'key' => 'gender',
-            'value' => $gender,
-            'type' => 'detail',
-        ]);*/
-
         $details = [
             ['key' => 'full_name', 'value' => $this->getFullName($user)],
             ['key' => 'middle_initial', 'value' => $this->getMiddleInitial($user)],
