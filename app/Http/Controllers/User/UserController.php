@@ -45,7 +45,7 @@ class UserController extends Controller
     public function store(UserRequest $registerUserRequest)
     {
         $this->userService->store($registerUserRequest);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'User data stored successfully');
     }
 
     /**
@@ -70,7 +70,7 @@ class UserController extends Controller
     public function update(UserRequest $updateRequest, $id)
     {
         $this->userService->update($updateRequest, $id);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'User data updated successfully');
     }
 
     /**

@@ -8,6 +8,9 @@
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                @if (Session::has('success'))
+                    <x-alert type="success" :message="Session::get('success')" />
+                @endif
                 <div class="overflow-hidden overflow-x-auto border-b border-gray-200 bg-white p-6">
 
                     <a href="{{ route('users.create') }}"
@@ -20,13 +23,19 @@
                             <thead>
                             <tr>
                                 <th class="bg-gray-50 px-6 py-3 text-left">
-                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Name</span>
+                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Full Name</span>
+                                </th>
+                                <th class="bg-gray-50 px-6 py-3 text-left">
+                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Avatar</span>
+                                </th>
+                                <th class="bg-gray-50 px-6 py-3 text-left">
+                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Middle Initial</span>
                                 </th>
                                 <th class="bg-gray-50 px-6 py-3 text-left">
                                     <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Email</span>
                                 </th>
                                 <th class="bg-gray-50 px-6 py-3 text-left">
-                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Phone</span>
+                                    <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Type</span>
                                 </th>
                                 <th class="w-56 bg-gray-50 px-6 py-3 text-left">
                                     <span class="text-xs font-medium uppercase leading-4 tracking-wider text-gray-500">Action</span>
@@ -38,13 +47,19 @@
                                 @foreach($users as $user)
                                     <tr class="bg-white">
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
-                                            {{ $user->username }}
+                                            {{ ucfirst($user->fullname) }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
+                                            <img src="{{ $user->avatar }}" width="40" height="40">
+                                        </td>
+                                        <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
+                                            <strong>{{ $user->middle_initial }}</strong>
                                         </td>
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
                                             {{ $user->email ?? '' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
-                                            {{ $user->type ?? '' }}
+                                            {{ ucfirst($user->type) ?? '' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
                                             <a href="{{ route('users.show', $user) }}"

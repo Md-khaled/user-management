@@ -43,11 +43,27 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
     protected static function booted(): void
     {
         static::saved(function (User $user) {
             event(new UserSaved($user));
         });
+    }
+
+    public function getAvatarAttribute()
+    {
+        return url('storage/' . $this->images->url)?: 'default.jpg';;
+    }
+
+    public function getFullnameAttribute()
+    {
+        return "{$this->firstname} {$this->middlename} {$this->lastname}";
+    }
+
+    public function getMiddleInitialAttribute()
+    {
+        return strtoupper(substr($this->middlename, 0, 1)) . '.';
     }
 
     public function images()

@@ -8,6 +8,9 @@
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                @if (Session::has('success'))
+                    <x-alert type="success" :message="Session::get('success')" />
+                @endif
                 <div class="overflow-hidden overflow-x-auto border-b border-gray-200 bg-white p-6">
 
                     <a href="{{ route('users.create') }}"
