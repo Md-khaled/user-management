@@ -4,6 +4,7 @@ namespace App\Services\User;
 
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Request;
 
 class UserService
@@ -26,12 +27,12 @@ class UserService
         return $this->userRepository->getUserById($id);
     }
 
-    public function store($requet)
+    public function store(array $requet)
     {
         return $this->userRepository->saveUser($requet);
     }
 
-    public function update($requet, $id)
+    public function update(int $id, array $requet)
     {
         return $this->userRepository->updateUser($requet, $id);
     }
@@ -64,5 +65,10 @@ class UserService
     public function saveUserBackgroundInfo(User $user)
     {
         return $this->userRepository->saveUserBackgroundInformation($user);
+    }
+
+    public function upload(UploadedFile $file, $user)
+    {
+        return $this->userRepository->upload($file, $user);
     }
 }

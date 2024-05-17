@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        return url('storage/' . $this->images->url) ?: 'default.jpg';;
+        return url('storage/' . $this->images?->url) ?: 'default.jpg';;
     }
 
     public function getFullnameAttribute()

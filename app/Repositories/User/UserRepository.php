@@ -8,6 +8,8 @@ use App\Interfaces\User\UserInterface;
 use App\Models\Detail;
 use App\Models\User;
 use App\Services\FileUploadService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -22,26 +24,22 @@ class UserRepository implements UserInterface
         return User::paginate(self::PER_PAGE);
     }
 
-    public function saveUser($request)
+    public function saveUser(array $request)
     {
         try {
             DB::beginTransaction();
 
             $user = User::create([
-                'prefixname' => $request->prefixname,
-                'firstname' => $request->firstname,
-                'middlename' => $request->middlename,
-                'lastname' => $request->lastname,
-                'suffixname' => $request->suffixname,
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => $this->hash($request->password),
-                'type' => $request->type,
+                'prefixname' => $request['prefixname'],
+                'firstname' => $request['firstname'],
+                'middlename' => $request['middlename'],
+                'lastname' => $request['lastname'],
+                'suffixname' => $request['suffixname'],
+                'username' => $request['username'],
+                'email' => $request['email'],
+                'password' => $this->hash($request['password']),
+                'type' => $request['type'],
             ]);
-
-            if ($request->has('photo')) {
-                FileUploadService::uploadFile($request->photo, $user);
-            }
 
             DB::commit();
 
@@ -59,20 +57,7 @@ class UserRepository implements UserInterface
             DB::beginTransaction();
 
             $user = User::findOrFail($id);
-            $user->update($request->only([
-                'prefixname',
-                'firstname',
-                'middlename',
-                'lastname',
-                'suffixname',
-                'username',
-                'email',
-                'type',
-            ]));
-
-            if ($request->has('photo')) {
-                FileUploadService::uploadFile($request->photo, $user);
-            }
+            $user->update($request);
 
             DB::commit();
 
@@ -80,7 +65,7 @@ class UserRepository implements UserInterface
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating user: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to create user'], 500);
+            return response()->json(['error' => 'Failed to update user'], 500);
         }
     }
 
@@ -118,6 +103,11 @@ class UserRepository implements UserInterface
     public function hash($password)
     {
         return Hash::make($password);
+    }
+
+    public function upload(UploadedFile $file, $user)
+    {
+        FileUploadService::uploadFile($file, $user);
     }
 
     public function saveUserBackgroundInformation(User $user)

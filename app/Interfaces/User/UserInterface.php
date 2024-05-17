@@ -3,6 +3,7 @@
 namespace App\Interfaces\User;
 
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Request;
 
 interface UserInterface
@@ -11,9 +12,9 @@ interface UserInterface
 
     public function getUserById($id);
 
-    public function saveUser($data);
+    public function saveUser(array $data);
 
-    public function updateUser($data, $id);
+    public function updateUser(array $data, int $id);
 
     public function deleteUser($id);
     public function restore($id);
@@ -21,4 +22,5 @@ interface UserInterface
     public function deleteUserList();
     public function hash($password);
     public function saveUserBackgroundInformation(User $user);
+    public function upload(UploadedFile $file, $user);
 }

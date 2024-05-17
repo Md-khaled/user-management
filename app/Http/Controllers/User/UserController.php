@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class UserController extends Controller
@@ -21,6 +24,7 @@ class UserController extends Controller
     {
         $this->userService = $userService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -44,7 +48,20 @@ class UserController extends Controller
      */
     public function store(UserRequest $registerUserRequest)
     {
-        $this->userService->store($registerUserRequest);
+        try {
+            DB::beginTransaction();
+
+            $user = $this->userService->store($registerUserRequest->toArray());
+            if ($registerUserRequest->has('photo')) {
+                $this->userService->upload($registerUserRequest->photo, $user);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating user: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to create user'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         return redirect()->back()->with('success', 'User data stored successfully');
     }
 
@@ -69,7 +86,30 @@ class UserController extends Controller
      */
     public function update(UserRequest $updateRequest, $id)
     {
-        $this->userService->update($updateRequest, $id);
+        try {
+            DB::beginTransaction();
+            $data = $updateRequest->only([
+                'prefixname',
+                'firstname',
+                'middlename',
+                'lastname',
+                'suffixname',
+                'username',
+                'email',
+                'type',
+            ]);
+            $user = $this->userService->update($id, $data);
+            if ($updateRequest->has('photo')) {
+                $this->userService->upload($updateRequest->photo, $user);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating user: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update user'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         return redirect()->back()->with('success', 'User data updated successfully');
     }
 
@@ -87,11 +127,13 @@ class UserController extends Controller
         $deletedUsers = $this->userService->listTrashed();
         return view('users.deleted-list', compact('deletedUsers'));
     }
+
     public function restore(int $id)
     {
         $this->userService->restore($id);
         return back();
     }
+
     public function delete(int $id)
     {
         $this->userService->delete($id);
