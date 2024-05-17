@@ -32,20 +32,7 @@ class UserServiceTest extends TestCase
         $this->userRepositoryMock = $this->createMock(UserInterface::class);
         $this->userService = new UserService($this->userRepositoryMock);
     }
-
-    /*public function test_it_can_return_a_paginated_list_of_users()
-    {
-        // Mock UserInterface
-        $userMock = \Mockery::mock(UserInterface::class);
-        $userMock->shouldReceive('getUsers')
-            ->once()
-            ->andReturn(new \Illuminate\Pagination\LengthAwarePaginator([], 10, 1, 1));
-        $userService = new UserService($userMock);
-        $users = $userService->all();
-        // Assert the result
-        $this->assertInstanceOf(\Illuminate\Pagination\LengthAwarePaginator::class, $users);
-    }*/
-
+    
     public function test_it_can_return_a_paginated_list_of_users()
     {
         $users = $this->createUser(self::USER_COUNT);
