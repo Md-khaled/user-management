@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\User;
 
+use App\Models\Image;
 use App\Traits\CreateDummyUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -153,5 +156,30 @@ class UserTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect($url);
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
+    }
+
+    public function test_it_can_upload_photo_to_update_user_info()
+    {
+        Storage::fake('public');
+        $userData = $this->createUser()->toArray();
+        $file = UploadedFile::fake()->image('random.jpg');
+        $user = $this->user;
+        $updateData = [
+            'firstname' => 'UpdatedName',
+            'prefixname' => $user->prefixname,
+            'middlename' => $user->middlename,
+            'lastname' => $user->lastname,
+            'suffixname' => $user->suffixname,
+            'username' => $user->username,
+            'email' => $user->email,
+            'type' => $user->type,
+            'photo' => $file
+        ];
+        $url = route('users.update', $user->id);
+
+        $this->from($url)->put($url, $updateData);
+        $this->assertEquals(Image::STORAGE_PATH. '/' . $file->hashName(), Image::latest()->first()->url);
+
+        Storage::disk('public')->assertExists(Image::STORAGE_PATH. '/' . $file->hashName());
     }
 }

@@ -3,12 +3,15 @@
 namespace Tests\Unit\User;
 
 use App\Interfaces\User\UserInterface;
+use App\Models\Image;
 use App\Models\User;
 use App\Services\User\UserService;
 use App\Traits\CreateDummyUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UserServiceTest extends TestCase
@@ -106,7 +109,7 @@ class UserServiceTest extends TestCase
             ->with($updatedData, $user->id)
             ->willReturn($user->update($updatedData));
 
-        $result = $this->userService->update($updatedData, $user->id);
+        $result = $this->userService->update($user->id, $updatedData);
         $this->assertTrue($result);
     }
 
@@ -158,14 +161,18 @@ class UserServiceTest extends TestCase
         $this->userService->delete($trashedUser->id);
     }
 
-    public function it_can_upload_photo()
+    public function test_it_can_upload_photo()
     {
         $user = $this->createUser();
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('uploaded_photo.jpg');
 
         $this->userRepositoryMock->expects($this->once())
-            ->method('saveUserBackgroundInformation')
-            ->with($user);
+            ->method('upload')
+            ->with($file, $user)
+            ->willReturn(Image::STORAGE_PATH . '/uploaded_photo.jpg');
+        $result = $this->userService->upload($file, $user);
 
-        $this->userService->saveUserBackgroundInfo($user);
+        $this->assertEquals(Image::STORAGE_PATH . '/uploaded_photo.jpg', $result);
     }
 }

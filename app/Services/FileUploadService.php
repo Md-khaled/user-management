@@ -19,7 +19,8 @@ class FileUploadService
             $existingImage->delete();
         }
 
-        $fileName = time() .'-'. Str::random(20) . '.' . $file->getClientOriginalExtension();
+        $fileName = $file->hashName();
+//        $fileName = time() .'-'. Str::random(20) . '.' . $file->getClientOriginalExtension();
         Storage::disk(self::STORAGE_TYPE)->putFileAs(Image::STORAGE_PATH, $file, $fileName);
         $model->images()->create(['url' => Image::STORAGE_PATH. '/' . $fileName]);
 
