@@ -24,7 +24,7 @@ laravel "^11.0"
 1. **Clone the repository:** `git clone <https://github.com/Md-khaled/user-management.git>`
 2. **Navigate to the project directory:** `cd user-management`
 3. **Install Composer dependencies:** `composer install`
-4. **Copy the `.env.example` file to `.env` and configure your environment variables likevMySql:** `cp .env.example .env`
+4. **Copy the `.env.example` file to `.env` and configure your environment variables like MySql:** `cp .env.example .env`
 5. **Generate a new application key:** `php artisan key:generate`
 6. **Run database migrations to create the necessary tables:** `php artisan migrate:fresh`
 7. `npm install and npm run dev`
