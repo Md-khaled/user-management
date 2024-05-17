@@ -1,42 +1,46 @@
 <?php
 
-namespace Tests\Unit\User;
+namespace Tests\Unit;
 
-use App\Interfaces\User\UserInterface;
+use Tests\TestCase;
+use App\Events\UserSaved;
+use App\Listeners\SaveUserBackgroundInformation;
 use App\Models\User;
 use App\Services\User\UserService;
-use App\Traits\CreateDummyUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Tests\TestCase;
 
 class SaveUserBackgroundInformationTest extends TestCase
 {
-    use RefreshDatabase, WithoutMiddleware, CreateDummyUser;
+    use RefreshDatabase;
 
-    const USER_COUNT = 10;
-    const CURRENT_PAGE = 1;
-
-    protected $userService;
-    protected $userRepositoryMock;
-    private $user;
-
-    public function setUp(): void
+    public function test_save_user_background_information()
     {
-        parent::setUp();
+        $userServiceMock = $this->createMock(UserService::class);
+        $user = User::factory()->create([
+            'prefixname' => 'Mr',
+            'firstname' => 'John',
+            'middlename' => 'Philip',
+            'lastname' => 'Doe',
+        ]);
 
-        $this->userRepositoryMock = $this->createMock(UserInterface::class);
-        $this->userService = new UserService($this->userRepositoryMock);
-    }
+        $userServiceMock->expects($this->once())
+            ->method('saveUserBackgroundInfo')
+            ->with($user);
 
-    public function test_it_can_return_a_paginated_list_of_users()
-    {
-        $user = $this->createUser();
-        $this->userRepositoryMock->expects($this->once())
-            ->method('saveUserBackgroundInformation')
-            ->with($user->id)
-            ->willReturn($user);
-       $this->assertTrue(true);
+        $listener = new SaveUserBackgroundInformation($userServiceMock);
+
+        $listener->handle(new UserSaved($user));
+        $this->assertDatabaseHas('details', [
+            'user_id' => $user->id,
+            'key' => 'full_name',
+            'value' => 'John Philip Doe',
+            'type' => 'detail',
+        ]);
+        $this->assertDatabaseHas('details', [
+            'user_id' => $user->id,
+            'key' => 'middle_initial',
+            'value' => 'P.',
+            'type' => 'detail',
+        ]);
     }
 }
