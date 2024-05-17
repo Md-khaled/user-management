@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Detail extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'key',
@@ -16,4 +17,9 @@ class Detail extends Model
         'status',
         'type',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

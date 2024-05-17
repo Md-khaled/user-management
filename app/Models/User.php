@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        return url('storage/' . $this->images->url)?: 'default.jpg';;
+        return url('storage/' . $this->images->url) ?: 'default.jpg';;
     }
 
     public function getFullnameAttribute()
@@ -64,6 +64,11 @@ class User extends Authenticatable
     public function getMiddleInitialAttribute()
     {
         return strtoupper(substr($this->middlename, 0, 1)) . '.';
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Detail::class);
     }
 
     public function images()
